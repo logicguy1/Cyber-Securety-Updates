@@ -9,7 +9,20 @@ def get_entry(lastEntry):
     entry = NewsFeed.entries[0]
 
     if lastEntry.title != entry.title:
-        requests.post(webhook, data = {"content" : f"```md\n{entry.title}\n{'=' * len(entry.title)}\n{entry.description}\n\n[][ {entry.link} ][]```"})
+        res = requests.post(
+            webhook,
+            headers = {"Content-Type" : "application/json"},
+            json = {
+                "embeds" : [
+                    {
+                        "title" : entry.title,
+                        "description" : entry.description,
+                        "url" : entry.link,
+                        "color": 5814783
+                    }
+                ]
+            }
+        )
     time.sleep(60)
 
     get_entry(entry)
